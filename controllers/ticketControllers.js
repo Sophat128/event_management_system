@@ -64,21 +64,19 @@ const getTicketById = (req, res) => {
 };
 
 const createTicket = (req, res) => {
-  const { eventId, ticketType, purchaseDate } = req.body;
-
+  const { eventId, userId, ticketType, purchaseDate } = req.body;
+  
   const newId =
-    ticketData.length > 0 ? ticketData[ticketData.length - 1].id + 1 : 1;
+    ticketData.length > 0 ? ticketData[ticketData.length - 1].ticketId + 1 : 1;
   const now = new Date().toISOString();
-
-  console.log("last data: ", ticketData[ticketData.length - 1]);
 
   const ticket = {
     ticketId: newId,
+    userId: userId,
     eventId: eventId,
     ticketType: ticketType,
     purchaseDate: purchaseDate,
   };
-  console.log("Data: ", ticket);
   // Add the new user data to the existing data array
   let existingData = [];
   existingData = ticketData;
@@ -87,34 +85,28 @@ const createTicket = (req, res) => {
   writeDataToFile(path, existingData, res, ticket, 201);
 };
 
-// PUT endpoint to update user data
+
+
 const updateTicket = (req, res) => {
   const ticketId = parseInt(req.params.id);
-  const { eventId, ticketType, purchaseDate } = req.body;
+  const { eventId, userId, ticketType, purchaseDate } = req.body;
 
   // Read existing data from the JSON file
-  let existingData = [];
-  existingData = ticketData;
+  let existingData = ticketData;
 
-  // Find the user to update
-  const ticketIndex = ticketData.findIndex((ticket) => ticket.id === ticketId);
+  // Find the ticket to update
+  const ticketIndex = ticketData.findIndex((ticket) => ticket.ticketId === ticketId);
   if (ticketIndex === -1) {
-    return res.status(404).send("User not found");
+    return res.status(404).send("Ticket not found");
   }
 
-  // Update the user's data
+  // Update the ticket's data only with provided fields (partial update)
   const updatedTicket = {
     ...existingData[ticketIndex],
-    eventId:
-      eventId !== undefined ? eventId : existingData[ticketIndex].eventId,
-    ticketType:
-      ticketType !== undefined
-        ? ticketType
-        : existingData[ticketIndex].ticketType,
-    purchaseDate:
-      purchaseDate !== undefined
-        ? purchaseDate
-        : existingData[ticketIndex].purchaseDate,
+    ...(eventId !== undefined && { eventId }),
+    ...(userId !== undefined && { userId }),
+    ...(ticketType !== undefined && { ticketType }),
+    ...(purchaseDate !== undefined && { purchaseDate }),
   };
   existingData[ticketIndex] = updatedTicket;
 
@@ -122,14 +114,15 @@ const updateTicket = (req, res) => {
   writeDataToFile(path, existingData, res, updatedTicket, 200);
 };
 
+
 // DELETE endpoint to update user data
 const deleteTicket = (req, res) => {
   const ticketId = parseInt(req.params.id);
-  const ticketIndex = ticketData.findIndex((event) => event.id === ticketId);
+  const ticketIndex = ticketData.findIndex((event) => event.ticketId === ticketId);
   if (ticketIndex === -1) {
     return res.status(404).send("Event not found");
   }
-  ticketData = ticketData.filter((event) => event.id !== ticketId);
+  ticketData = ticketData.filter((event) => event.ticketId !== ticketId);
   writeDataToFile(path, ticketData, res, "Event deleted successfully", 200);
 };
 
