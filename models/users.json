@@ -51,7 +51,7 @@
   },
   {
     "id": 12,
-    "username": "Sophat2",
+    "username": "testing",
     "password": "sophat@123"
   },
   {
@@ -59,9 +59,5 @@
     "username": "Sophat2",
     "password": "sophat@123"
   },
-  {
-    "id": 14,
-    "username": "Neath",
-    "password": "Neath@123"
-  }
+  {}
 ]
