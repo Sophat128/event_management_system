@@ -1,0 +1,16 @@
+[
+  {
+    "ticketId": 1,
+    "eventId": 1,
+    "userId": 2,
+    "ticketType": "VIP",
+    "purchaseDate": "2024-05-01"
+  },
+  {
+    "ticketId": 2,
+    "eventId": 2,
+    "userId": 2,
+    "ticketType": "Standard",
+    "purchaseDate": "2024-05-10"
+  }
+]

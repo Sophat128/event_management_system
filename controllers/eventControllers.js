@@ -101,7 +101,7 @@ const createEvent = (req, res) => {
     eventData.length > 0 ? eventData[eventData.length - 1].id + 1 : 1;
   const now = new Date().toISOString();
 
-  console.log("last data: ", eventData[eventData.length - 1]);
+
 
   const event = {
     eventId: newId,
@@ -111,16 +111,20 @@ const createEvent = (req, res) => {
     location: location,
     organizerID: organizerID,
   };
-  console.log("Data: ", event);
+
   // Add the new user data to the existing data array
   let existingData = [];
   existingData = eventData;
   existingData.push(event);
+  if(title == null || description == null || date == null || location == null || organizerID == null){
+    res.status(400).send({message: "bad request"})
+  }else{
+    writeDataToFile(path, existingData, res, event, 201);
 
-  writeDataToFile(path, existingData, res, event, 201);
+  }
+  
 };
 
-// PUT endpoint to update user data
 const updateEvent = (req, res) => {
   const eventId = parseInt(req.params.id);
   const { title, description, date, location, organizerID } = req.body;
@@ -129,42 +133,35 @@ const updateEvent = (req, res) => {
   let existingData = [];
   existingData = eventData;
 
-  // Find the user to update
-  const eventIndex = eventData.findIndex((event) => event.id === eventId);
+  // Find the event to update
+  const eventIndex = eventData.findIndex((event) => event.eventId === eventId);
   if (eventIndex === -1) {
-    return res.status(404).send("User not found");
+    return res.status(404).send("Event not found");
   }
 
-  // Update the user's data
+  // Update the event's data only with provided fields (partial update)
   const updatedEvent = {
     ...existingData[eventIndex],
-    title: title !== undefined ? title : existingData[eventIndex].title,
-    description:
-      description !== undefined
-        ? description
-        : existingData[eventIndex].description,
-    date: date !== undefined ? date : existingData[eventIndex].date,
-    location:
-      location !== undefined ? location : existingData[eventIndex].location,
-    organizerID:
-      organizerID !== undefined
-        ? organizerID
-        : existingData[eventIndex].organizerID,
+    ...(title !== undefined && { title }),
+    ...(description !== undefined && { description }),
+    ...(date !== undefined && { date }),
+    ...(location !== undefined && { location }),
+    ...(organizerID !== undefined && { organizerID }),
   };
   existingData[eventIndex] = updatedEvent;
-
   // Write the updated data back to the JSON file
   writeDataToFile(path, existingData, res, updatedEvent, 200);
 };
 
+
 // DELETE endpoint to update user data
 const deleteEvent = (req, res) => {
   const eventId = parseInt(req.params.id);
-  const eventIndex = eventData.findIndex((event) => event.id === eventId);
+  const eventIndex = eventData.findIndex((event) => event.eventId === eventId);
   if (eventIndex === -1) {
     return res.status(404).send("Event not found");
   }
-  eventData = eventData.filter((event) => event.id !== eventId);
+  eventData = eventData.filter((event) => event.eventId !== eventId);
   writeDataToFile(path, eventData, res, "Event deleted successfully", 200);
 };
 
