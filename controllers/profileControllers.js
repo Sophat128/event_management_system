@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = require("path");
+
 const profilePath = "./models/profiles.json";
 ;
 let profileData;
@@ -58,43 +58,62 @@ const getProfileById = (req, res) => {
 const createProfile = (req, res) => {
     const { userId, firstName, lastName, phoneNumber, bio } = req.body;
 
-    const newId = profileData.length > 0 ? profileData[profileData.length - 1].profileId + 1 : 1;
+    const newId = profileData.length > 0 ? profileData[profileData.length - 1].id + 1 : 1;
+    const now = new Date().toISOString();
 
     const profile = {
         profileId: newId,
-        userId,
-        firstName,
-        lastName,
-        phoneNumber,
-        bio,
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        bio: bio,
     };
 
-    profileData.push(profile);
-
-    writeDataToFile(profilePath, profileData, res, profile, 201);
+    //Add the new profile data to the existing data array
+    let existingData = []
+    existingData = profileData;
+    existingData.push(profile);
+    if(firstName == null || lastName == null || phoneNumber == null || bio == null){
+        res.status(400).send({message: "Bad request"})
+    }else{
+        writeDataToFile(path, existingData, res, profile, 201);
+    }
 };
 
 const updateProfile = (req, res) => {
     const profileId = parseInt(req.params.id);
     const { userId, firstName, lastName, phoneNumber, bio } = req.body;
 
+    // Read existing data from the JSON file
+    let existingData = [];
+    existingData = profileData;
+
+    // Find the event to update
     const profileIndex = profileData.findIndex((profile) => profile.profileId === profileId);
     if (profileIndex === -1) {
         return res.status(404).send("Profile not found");
     }
 
+    // const updatedProfile = {
+    //     ...profileData[profileIndex],
+    //     userId: userId !== undefined ? userId : profileData[profileIndex].userId,
+    //     firstName: firstName !== undefined ? firstName : profileData[profileData[profileIndex].firstName],
+    //     lastName: lastName !== undefined ? lastName : profileData[profileData[profileIndex].lastName],
+    //     phoneNumber: phoneNumber !== undefined ? phoneNumber : profileData[profileIndex].phoneNumber,
+    //     bio: bio !== undefined ? bio : profileData[profileIndex].bio,
+    // };
     const updatedProfile = {
-        ...profileData[profileIndex],
-        userId: userId !== undefined ? userId : profileData[profileIndex].userId,
-        firstName: firstName !== undefined ? firstName : profileData[profileData[profileIndex].firstName],
-        lastName: lastName !== undefined ? lastName : profileData[profileData[profileIndex].lastName],
-        phoneNumber: phoneNumber !== undefined ? phoneNumber : profileData[profileIndex].phoneNumber,
-        bio: bio !== undefined ? bio : profileData[profileIndex].bio,
+        ...existingData[profileIndex],
+        ...(userId !== undefined && { userId }),
+        ...(firstName !== undefined && { firstName }),
+        ...(lastName !== undefined && { lastName }),
+        ...(phoneNumber !== undefined && { phoneNumber }),
+        ...(bio !== undefined && { bio }),
     };
-
-    profileData[profileIndex] = updatedProfile;
-
-    writeDataToFile(profilePath, profileData, res, updatedProfile, 200);
+    existingData[eventIndex] = updatedEvent;
+      // Write the updated data back to the JSON file
+    writeDataToFile(path, existingData, res, updatedProfile, 200);
 };
 
 const deleteProfile = (req, res) => {
