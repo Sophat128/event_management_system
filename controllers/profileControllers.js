@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const profilePath = "./models/profiles.json";
-;
+
 let profileData;
 
 try {
@@ -58,7 +58,7 @@ const getProfileById = (req, res) => {
 const createProfile = (req, res) => {
     const { userId, firstName, lastName, phoneNumber, bio } = req.body;
 
-    const newId = profileData.length > 0 ? profileData[profileData.length - 1].id + 1 : 1;
+    const newId = profileData.length > 0 ? profileData[profileData.length - 1].profileId + 1 : 1;
     const now = new Date().toISOString();
 
     const profile = {
@@ -77,7 +77,7 @@ const createProfile = (req, res) => {
     if(firstName == null || lastName == null || phoneNumber == null || bio == null){
         res.status(400).send({message: "Bad request"})
     }else{
-        writeDataToFile(path, existingData, res, profile, 201);
+        writeDataToFile(profilePath, existingData, res, profile, 201);
     }
 };
 
@@ -111,9 +111,9 @@ const updateProfile = (req, res) => {
         ...(phoneNumber !== undefined && { phoneNumber }),
         ...(bio !== undefined && { bio }),
     };
-    existingData[eventIndex] = updatedEvent;
+    existingData[profileIndex] = updatedProfile;
       // Write the updated data back to the JSON file
-    writeDataToFile(path, existingData, res, updatedProfile, 200);
+    writeDataToFile(profilePath, existingData, res, updatedProfile, 200);
 };
 
 const deleteProfile = (req, res) => {
