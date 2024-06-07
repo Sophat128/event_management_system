@@ -17,6 +17,7 @@ app.use("",eventRoutes)
 app.use("",ticketRoutes)
 app.use("",userRoutes)
 app.use("",profileRoutes)
+app.use("",eventSpeakerRoutes)
 
 
 app.listen(process.env.PORT, ()=> {
