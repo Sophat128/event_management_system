@@ -65,7 +65,7 @@ const createNewUser = (req, res) => {
   console.log("last data: ", userData[userData.length - 1]);
 
   const user = {
-    // userId: newId,
+    userId: newId,
     username: username,
     password: password,
   };
@@ -74,22 +74,25 @@ const createNewUser = (req, res) => {
   let existingData = [];
   existingData = userData;
   existingData.push(user);
-
-  writeDataToFile(path, existingData, res, user, 201);
-}
+  if (username == null || password == null) {
+    res.status(400).send({ message: "bad request" });
+  } else {
+    writeDataToFile(path, existingData, res, user, 201);
+  }
+};
 
 const updatePassword = (req, res) => {
-  const {body, params} = req;
-  console.log({params})
-  const id = parseInt(params.id)
-  const {password} = body;
-  userData.forEach(user => {
-    if(user.id === id){
-      user.password = password
+  const { body, params } = req;
+  console.log({ params });
+  const id = parseInt(params.id);
+  const { password } = body;
+  userData.forEach((user) => {
+    if (user.id === id) {
+      user.password = password;
     }
   });
   res.status(204).send();
-}
+};
 
 const updateUser = (req, res) => {
   const userId = parseInt(req.params.id);
@@ -104,15 +107,13 @@ const updateUser = (req, res) => {
   if (userIndex === -1) {
     return response.status(404).send("User not found");
   }
-   // Update the user's data
-   const updatedUser = {
+  // Update the user's data
+  const updatedUser = {
     ...existingData[userIndex],
     username:
-    username !== undefined ? username : existingData[userIndex].username,
+      username !== undefined ? username : existingData[userIndex].username,
     password:
-    password !== undefined
-        ? password
-        : existingData[userIndex].password,
+      password !== undefined ? password : existingData[userIndex].password,
   };
   existingData[userIndex] = updatedUser;
 
@@ -128,7 +129,7 @@ const deleteUser = (req, res) => {
   }
   userData = userData.filter((user) => user.id !== userId);
   writeDataToFile(path, userData, res, "User deleted successfully", 200);
-}
+};
 
 module.exports = {
   getUserById,
@@ -137,5 +138,4 @@ module.exports = {
   updatePassword,
   updateUser,
   deleteUser,
-  
-}
+};
