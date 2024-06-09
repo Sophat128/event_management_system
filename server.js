@@ -7,6 +7,7 @@ const profileRoutes = require("./routers/profileRoutes");
 const morgan = require("morgan");
 const ticketRoutes = require("./routers/ticketRoutes");
 const app = express();
+const userRoutes = require("./routers/userRoutes");
 
 app.use(morgan("common"))
 app.set("view engine", 'ejs')
@@ -14,6 +15,7 @@ app.use(express.json())
 app.use("/assets", express.static("public"))
 app.use("",eventRoutes)
 app.use("",ticketRoutes)
+app.use("",userRoutes)
 app.use("",profileRoutes)
 
 
