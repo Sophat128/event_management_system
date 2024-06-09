@@ -35,7 +35,7 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 function findTicketById(ticketId, res) {
   const ticket = ticketData.find((ticket) => ticket.ticketId === ticketId);
   if (!ticket) {
-    res.status(404).send("User not found");
+    res.status(404).send("Ticket not found");
   } else {
     return res.json(ticket);
   }
@@ -81,8 +81,11 @@ const createTicket = (req, res) => {
   let existingData = [];
   existingData = ticketData;
   existingData.push(ticket);
-
-  writeDataToFile(path, existingData, res, ticket, 201);
+  if(userId == null || eventId == null || ticketType == null || purchaseDate == null){
+    res.status(400).send({message: "bad request"})
+  }else{
+    writeDataToFile(path, existingData, res, ticket, 201);
+  }
 };
 
 
@@ -120,10 +123,10 @@ const deleteTicket = (req, res) => {
   const ticketId = parseInt(req.params.id);
   const ticketIndex = ticketData.findIndex((event) => event.ticketId === ticketId);
   if (ticketIndex === -1) {
-    return res.status(404).send("Event not found");
+    return res.status(404).send("Ticket not found");
   }
   ticketData = ticketData.filter((event) => event.ticketId !== ticketId);
-  writeDataToFile(path, ticketData, res, "Event deleted successfully", 200);
+  writeDataToFile(path, ticketData, res, "Ticket deleted successfully", 200);
 };
 
 module.exports = {

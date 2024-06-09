@@ -3,14 +3,14 @@
     "ticketId": 1,
     "eventId": 1,
     "userId": 2,
-    "ticketType": "VIP",
+    "ticketType": "Standard",
     "purchaseDate": "2024-05-01"
   },
   {
-    "ticketId": 2,
-    "eventId": 2,
-    "userId": 2,
-    "ticketType": "Standard",
+    "ticketId": 4,
+    "userId": 9,
+    "eventId": 4,
+    "ticketType": "VIP",
     "purchaseDate": "2024-05-10"
   }
 ]
