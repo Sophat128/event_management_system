@@ -32,26 +32,30 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 }
 
 // Function to filter articles based on query parameters
-// function filter(articles, query) {
-//   return articles.filter((article) => {
-//     const matchesCreatedBy = query.created_by
-//       ? article.created_by === query.created_by
-//       : true;
-//     const matchesIsPublished =
-//       query.is_published !== undefined
-//         ? article.is_published === (query.is_published === "true")
-//         : true;
-//     const matchesTitle = query.title
-//       ? article.title.toLowerCase().includes(query.title.toLowerCase())
-//       : true;
-//     const matchesContent = query.contents
-//       ? article.contents.toLowerCase().includes(query.contents.toLowerCase())
-//       : true;
-//     return (
-//       matchesCreatedBy && matchesIsPublished && matchesTitle && matchesContent
-//     );
-//   });
-// }
+function search(events, query) {
+  return events.filter((event) => {
+    const matchesEventID = query.eventId
+      ? event.eventId === query.eventId
+      : true;
+    const matchesTitle = query.title
+      ? event.title.toLowerCase().includes(query.title.toLowerCase())
+      : true;
+    const matchesDescription = query.description
+      ? event.description.toLowerCase().includes(query.description.toLowerCase())
+      : true;
+      const matchesLocation =
+      query.location !== undefined
+        ? event.location === query.location
+        : true;
+        const matchesOrganizationId =
+      query.organizerID !== undefined
+        ? event.organizerID === query.organizerID
+        : true;
+    return (
+      matchesEventID && matchesDescription && matchesTitle && matchesDescription && matchesLocation && matchesOrganizationId
+    );
+  });
+}
 
 function findEventById(eventId, res) {
   const event = eventData.find((event) => event.eventId === eventId);
@@ -62,16 +66,16 @@ function findEventById(eventId, res) {
   }
 }
 
-// const filterArticles = (req, res) => {
-//   const query = req.query;
+const searchEvent = (req, res) => {
+  const query = req.query;
 
-//   const filteredArticles = filter(eventData, query);
+  const filteredEvent = search(eventData, query);
 
-//   res.status(200).json({
-//     message: "Articles fetched successfully",
-//     data: filteredArticles,
-//   });
-// };
+  res.status(200).json({
+    message: "Event fetched successfully",
+    data: filteredEvent,
+  });
+};
 
 const getAllEvents = (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
@@ -166,6 +170,7 @@ const deleteEvent = (req, res) => {
 };
 
 module.exports = {
+  searchEvent,
   getAllEvents,
   getEventById,
   createEvent,
