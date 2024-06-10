@@ -31,7 +31,6 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
   }
 }
 
-
 function findTicketById(ticketId, res) {
   const ticket = ticketData.find((ticket) => ticket.ticketId === ticketId);
   if (!ticket) {
@@ -40,7 +39,6 @@ function findTicketById(ticketId, res) {
     return res.json(ticket);
   }
 }
-
 
 const getAllTickets = (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified

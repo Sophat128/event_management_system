@@ -60,7 +60,7 @@ const createNewUser = (req, res) => {
   const { username, password } = req.body;
 
   const newId =
-    userData.length > 0 ? userData[userData.length - 1].id + 1 : 1;
+    userData.length > 0 ? userData[userData.length - 1].userId + 1 : 1;
 
   console.log("last data: ", userData[userData.length - 1]);
 

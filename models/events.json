@@ -5,6 +5,14 @@
     "description": "A conference about the latest in tech.",
     "date": "2024-06-01",
     "location": "Convention Center",
-    "OrganizerID": 1
+    "organizerID": 1
+  },
+  {
+    "eventId": 2,
+    "title": "AI Conference",
+    "description": "A conference about AI.",
+    "date": "2024-06-10",
+    "location": "Convention Center",
+    "organizerID": 1
   }
 ]
