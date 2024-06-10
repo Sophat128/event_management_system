@@ -45,23 +45,8 @@
     "password": "Judy#901"
   },
   {
-    "id": 11,
-    "username": "Sophat2",
-    "password": "sophat@123"
-  },
-  {
-    "id": 12,
-    "username": "Sophat2",
-    "password": "sophat@123"
-  },
-  {
-    "id": 13,
-    "username": "Sophat2",
-    "password": "sophat@123"
-  },
-  {
-    "id": 14,
-    "username": "Neath",
+    "userId": 11,
+    "username": "Neathwww",
     "password": "Neath@123"
   }
 ]

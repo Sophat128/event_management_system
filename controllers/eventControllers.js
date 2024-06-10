@@ -56,7 +56,7 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 function findEventById(eventId, res) {
   const event = eventData.find((event) => event.eventId === eventId);
   if (!event) {
-    res.status(404).send("User not found");
+    res.status(404).send("Event not found");
   } else {
     return res.json(event);
   }
@@ -98,7 +98,7 @@ const createEvent = (req, res) => {
   const { title, description, date, location, organizerID } = req.body;
 
   const newId =
-    eventData.length > 0 ? eventData[eventData.length - 1].id + 1 : 1;
+    eventData.length > 0 ? eventData[eventData.length - 1].eventId + 1 : 1;
   const now = new Date().toISOString();
 
 
