@@ -9,6 +9,30 @@ try {
   console.error("Error reading file:", err);
 }
 
+
+
+// Function to filter articles based on query parameters
+function filter(articles, query) {
+  return articles.filter((article) => {
+    const matchesCreatedBy = query.created_by
+      ? article.created_by === query.created_by
+      : true;
+    const matchesIsPublished =
+      query.is_published !== undefined
+        ? article.is_published === (query.is_published === "true")
+        : true;
+    const matchesTitle = query.title
+      ? article.title.toLowerCase().includes(query.title.toLowerCase())
+      : true;
+    const matchesContent = query.contents
+      ? article.contents.toLowerCase().includes(query.contents.toLowerCase())
+      : true;
+    return (
+      matchesCreatedBy && matchesIsPublished && matchesTitle && matchesContent
+    );
+  });
+}
+
 /**
  * Writes data to a JSON file and handles the Express response.
  *
@@ -29,6 +53,8 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
     res.status(500).send("Internal Server Error");
   }
 }
+
+
 
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
