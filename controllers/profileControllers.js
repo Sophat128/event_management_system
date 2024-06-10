@@ -12,6 +12,28 @@ try {
     profileData = [];
 }
 
+// Function to filter profiles based on query parameters
+function search(profiles, query) {
+    return profiles.filter((profile) => {
+        const matchesProfileId = query.profileId
+            ? profile.profileId === query.profileId
+            : true;
+        const matchesFirstName = query.firstName
+            ? profile.firstName.toLowerCase().includes(query.firstName.toLowerCase())
+            : true;
+        const matchesLastName = query.lastName
+            ? profile.lastName.toLowerCase().includes(query.lastName.toLowerCase())
+            : true;
+        const matchesBio = query.bio
+            ? profile.bio.toLowerCase().includes(query.bio.toLowerCase())
+            : true;
+
+        return (
+            matchesProfileId && matchesFirstName && matchesLastName && matchesBio
+        );
+    });
+}
+
 function writeDataToFile(filePath, data, res, reqData, statusCode) {
     try {
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
@@ -33,6 +55,17 @@ function findProfileById(profileId, res) {
         return res.json(profile);
     }
 }
+
+const searchProfile = (req, res) => {
+    const query = req.query;
+
+    const filteredProfile = search(profileData, query);
+
+    res.status(200).json({
+        message: "Profile fetched successfully",
+        data: filteredProfile,
+    });
+};
 
 const getAllProfiles = (req, res) => {
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
@@ -70,13 +103,13 @@ const createProfile = (req, res) => {
         bio: bio,
     };
 
-    //Add the new profile data to the existing data array
+    // Add the new profile data to the existing data array
     let existingData = []
     existingData = profileData;
     existingData.push(profile);
-    if(firstName == null || lastName == null || phoneNumber == null || bio == null){
-        res.status(400).send({message: "Bad request"})
-    }else{
+    if (firstName == null || lastName == null || phoneNumber == null || bio == null) {
+        res.status(400).send({ message: "Bad request" })
+    } else {
         writeDataToFile(profilePath, existingData, res, profile, 201);
     }
 };
@@ -104,7 +137,7 @@ const updateProfile = (req, res) => {
         ...(bio !== undefined && { bio }),
     };
     existingData[profileIndex] = updatedProfile;
-      // Write the updated data back to the JSON file
+    // Write the updated data back to the JSON file
     writeDataToFile(profilePath, existingData, res, updatedProfile, 200);
 };
 
@@ -121,6 +154,7 @@ const deleteProfile = (req, res) => {
 
 module.exports = {
     getAllProfiles,
+    searchProfile,
     getProfileById,
     createProfile,
     updateProfile,
