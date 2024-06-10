@@ -8,12 +8,6 @@
     "bio": "Event Organizer"
   },
   {
-    "profileId": 3,
-    "userId": 2,
-    "phoneNumber": "012409797",
-    "bio": "football"
-  },
-  {
     "profileId": 4,
     "userId": 4,
     "firstName": "Bob",
@@ -212,9 +206,6 @@
     "lastName": "Walker",
     "phoneNumber": "889-012-3457",
     "bio": "Audio Technician"
-  },
-  {
-    "profileId": 29
   },
   {
     "profileId": 30,
