@@ -95,14 +95,6 @@ const updateProfile = (req, res) => {
         return res.status(404).send("Profile not found");
     }
 
-    // const updatedProfile = {
-    //     ...profileData[profileIndex],
-    //     userId: userId !== undefined ? userId : profileData[profileIndex].userId,
-    //     firstName: firstName !== undefined ? firstName : profileData[profileData[profileIndex].firstName],
-    //     lastName: lastName !== undefined ? lastName : profileData[profileData[profileIndex].lastName],
-    //     phoneNumber: phoneNumber !== undefined ? phoneNumber : profileData[profileIndex].phoneNumber,
-    //     bio: bio !== undefined ? bio : profileData[profileIndex].bio,
-    // };
     const updatedProfile = {
         ...existingData[profileIndex],
         ...(userId !== undefined && { userId }),
