@@ -63,7 +63,7 @@ const getSpeakerById = (req, res) => {
 };
 
 const createSpeaker = (req, res) => {
-  const { nameType, bioType } = req.body;
+  const { name, bio } = req.body;
   
   const newId =
     speakerData.length > 0 ? speakerData[speakerData.length - 1].speakerId + 1 : 1;
@@ -71,8 +71,8 @@ const createSpeaker = (req, res) => {
 
   const speaker = {
     speakerId: newId,
-    nameType: nameType,
-    bioType: bioType,
+    name: name,
+    bio: bio,
   };
   // Add the new user data to the existing data array
   let existingData = [];
@@ -82,8 +82,47 @@ const createSpeaker = (req, res) => {
   writeDataToFile(path, existingData, res, speaker, 201);
 };
 
+const updateSpeaker = (req, res) => {
+  const speakerId = parseInt(req.params.id);
+  const { name, bio } = req.body;
+
+  // Read existing data from the JSON file
+  let existingData = speakerData;
+
+  // Find the ticket to update
+  const speakerIndex = speakerData.findIndex((speaker) => speaker.speakerId === speakerId);
+  if (speakerIndex === -1) {
+    return res.status(404).send("Ticket not found");
+  }
+
+  // Update the ticket's data only with provided fields (partial update)
+  const updatedSpeaker = {
+    ...existingData[speakerIndex],
+    ...(name !== undefined && { name }),
+    ...(bio !== undefined && { bio })
+  };
+  existingData[speakerIndex] = updatedSpeaker;
+
+  // Write the updated data back to the JSON file
+  writeDataToFile(path, existingData, res, updatedSpeaker, 200);
+};
+
+
+// DELETE endpoint to update user data
+const deleteSpeaker = (req, res) => {
+  const speakerId = parseInt(req.params.id);
+  const speakerIndex = speakerData.findIndex((speaker) => speaker.speakerId === speakerId);
+  if (speakerIndex === -1) {
+    return res.status(404).send("Speaker not found");
+  }
+  speakerData = speakerData.filter((speaker) => speaker.speakerId !== speakerId);
+  writeDataToFile(path, speakerData, res, "Speaker deleted successfully", 200);
+};
+
 module.exports = {
   getAllSpeakers,
   getSpeakerById,
-  createSpeaker
+  createSpeaker,
+  updateSpeaker,
+  deleteSpeaker,
 };
