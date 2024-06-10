@@ -32,7 +32,7 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
-  const user = userData.find((user) => user.id === id);
+  const user = userData.find((user) => user.userId === id);
   if (!user) {
     res.status(404).send("User not found");
   } else {
@@ -60,7 +60,7 @@ const createNewUser = (req, res) => {
   const { username, password } = req.body;
 
   const newId =
-    userData.length > 0 ? userData[userData.length - 1].id + 1 : 1;
+    userData.length > 0 ? userData[userData.length - 1].userId + 1 : 1; 
 
   console.log("last data: ", userData[userData.length - 1]);
 
@@ -87,7 +87,7 @@ const updatePassword = (req, res) => {
   const id = parseInt(params.id);
   const { password } = body;
   userData.forEach((user) => {
-    if (user.id === id) {
+    if (user.userId === id) {
       user.password = password;
     }
   });
@@ -103,7 +103,7 @@ const updateUser = (req, res) => {
   existingData = userData;
 
   // Find the user to update
-  const userIndex = userData.findIndex((user) => user.id === userId);
+  const userIndex = userData.findIndex((user) => user.userId === userId);
   if (userIndex === -1) {
     return response.status(404).send("User not found");
   }
@@ -123,11 +123,11 @@ const updateUser = (req, res) => {
 
 const deleteUser = (req, res) => {
   const userId = parseInt(req.params.id);
-  const userIndex = userData.findIndex((user) => user.id === userId);
+  const userIndex = userData.findIndex((user) => user.userId === userId);
   if (userIndex === -1) {
     return response.status(404).send("User not found");
   }
-  userData = userData.filter((user) => user.id !== userId);
+  userData = userData.filter((user) => user.userId !== userId);
   writeDataToFile(path, userData, res, "User deleted successfully", 200);
 };
 
