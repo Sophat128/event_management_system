@@ -70,7 +70,7 @@ const createEventspeakers = (req, res) => {
   eventspeakersData.length > 0 ? eventspeakersData[eventspeakersData.length - 1].eventId + 1 : 1;
   const now = new Date().toISOString();
 
-  const eventspeakers = {
+  const eventSpeakers = {
     eventId: newId,
     speakersId: speakersId,
   };
@@ -79,7 +79,7 @@ const createEventspeakers = (req, res) => {
   // Add the new Event data to the existing data array
   let existingData = [];
   existingData = eventspeakersData;
-  existingData.push(eventspeakers);
+  existingData.push(eventSpeakers);
   if(firstName == null || lastName == null || phoneNumber == null || bio == null){
     res.status(400).send({message: "Bad request"})
   }else{
