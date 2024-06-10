@@ -10,6 +10,32 @@ try {
   console.error("Error reading file:", err);
 }
 
+
+// Function to filter articles based on query parameters
+function search(tickets, query) {
+  return tickets.filter((ticket) => {
+    const matchesTicketId = query.ticketId
+      ? ticket.ticketId === query.ticketId
+      : true;
+    const matchesEventId =
+      query.eventId !== undefined
+        ? article.eventId === query.eventId 
+        : true;
+        const matchesTicketType =
+        query.ticketType !== undefined
+          ? ticket.ticketType === query.ticketType 
+          : true;
+          const matchesPurchaseDate =
+          query.purchaseDate !== undefined
+            ? ticket.purchaseDate === query.purchaseDate 
+            : true;
+    
+    return (
+      matchesTicketId && matchesEventId && matchesTicketType && matchesPurchaseDate
+    );
+  });
+}
+
 /**
  * Writes data to a JSON file and handles the Express response.
  *
@@ -31,7 +57,6 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
   }
 }
 
-
 function findTicketById(ticketId, res) {
   const ticket = ticketData.find((ticket) => ticket.ticketId === ticketId);
   if (!ticket) {
@@ -41,6 +66,16 @@ function findTicketById(ticketId, res) {
   }
 }
 
+const searchTicket = (req, res) => {
+  const query = req.query;
+
+  const filteredTicket = search(ticketData, query);
+
+  res.status(200).json({
+    message: "Ticket fetched successfully",
+    data: filteredTicket,
+  });
+};
 
 const getAllTickets = (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
@@ -130,6 +165,7 @@ const deleteTicket = (req, res) => {
 };
 
 module.exports = {
+  searchTicket,
   getAllTickets,
   getTicketById,
   createTicket,
