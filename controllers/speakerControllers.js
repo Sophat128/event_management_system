@@ -64,7 +64,7 @@ const getSpeakerById = (req, res) => {
 };
 
 const createSpeaker = (req, res) => {
-  const { speakerId, nameType, bioType } = req.body;
+  const { nameType, bioType } = req.body;
   
   const newId =
     speakerData.length > 0 ? speakerData[speakerData.length - 1].speakerId + 1 : 1;
@@ -83,3 +83,9 @@ const createSpeaker = (req, res) => {
   writeDataToFile(path, existingData, res, speaker, 201);
 };
 
+module.exports = {
+  getAllSpeakers,
+  getSpeakerById,
+  createSpeaker,
+
+};
