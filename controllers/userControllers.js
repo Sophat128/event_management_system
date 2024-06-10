@@ -9,26 +9,18 @@ try {
   console.error("Error reading file:", err);
 }
 
-
-
 // Function to filter articles based on query parameters
-function filter(articles, query) {
-  return articles.filter((article) => {
-    const matchesCreatedBy = query.created_by
-      ? article.created_by === query.created_by
+function search(users, query) {
+  return users.filter((user) => {
+    const matchesUserId = query.userId
+      ? user.userId === query.userId
       : true;
-    const matchesIsPublished =
-      query.is_published !== undefined
-        ? article.is_published === (query.is_published === "true")
-        : true;
-    const matchesTitle = query.title
-      ? article.title.toLowerCase().includes(query.title.toLowerCase())
+      const matchesUsername = query.username
+      ? user.username.toLowerCase().includes(query.username.toLowerCase())
       : true;
-    const matchesContent = query.contents
-      ? article.contents.toLowerCase().includes(query.contents.toLowerCase())
-      : true;
+    
     return (
-      matchesCreatedBy && matchesIsPublished && matchesTitle && matchesContent
+      matchesUserId && matchesUsername 
     );
   });
 }
@@ -64,6 +56,18 @@ const getUserById = (req, res) => {
   } else {
     return res.json(user);
   }
+};
+
+
+const searchUser = (req, res) => {
+  const query = req.query;
+
+  const filteredUser = search(userData, query);
+
+  res.status(200).json({
+    message: "User fetched successfully",
+    data: filteredUser,
+  });
 };
 
 const getAllUsers = (req, res) => {
@@ -159,6 +163,7 @@ const deleteUser = (req, res) => {
 
 module.exports = {
   getUserById,
+  searchUser,
   getAllUsers,
   createNewUser,
   updatePassword,
