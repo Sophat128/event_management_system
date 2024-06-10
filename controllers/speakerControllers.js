@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const path = "./models/speaker.json";
+const path = "./models/speakers.json";
 
 let speakerData;
 try {
@@ -40,7 +40,6 @@ function findSpeakerById(speakerId, res) {
     return res.json(speaker);
   }
 }
-
 
 const getAllSpeakers = (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
@@ -86,6 +85,5 @@ const createSpeaker = (req, res) => {
 module.exports = {
   getAllSpeakers,
   getSpeakerById,
-  createSpeaker,
-
+  createSpeaker
 };

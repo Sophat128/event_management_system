@@ -1,4 +1,12 @@
 [
-  {"speakerId": 1, "name": "Alice Smith", "bio": "Expert in AI and Machine Learning"},
-  {"speakerId": 2, "name": "Bob Johnson", "bio": "Renowned Health and Wellness Speaker"}
+  {
+    "speakerId": 1,
+    "name": "Alice Smith",
+    "bio": "Expert in AI and Machine Learning"
+  },
+  {
+    "speakerId": 2,
+    "name": "Bob Johnson",
+    "bio": "Renowned Health and Wellness Speaker"
+  }
 ]

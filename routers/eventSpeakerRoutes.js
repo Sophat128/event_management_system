@@ -1,14 +1,14 @@
-const  eventspeakersRoutes = require("express").Router();
-const  eventspeakersController = require("../controllers/eventspeakersControllers")
+const  eventSpeakersRoutes = require("express").Router();
+const  eventSpeakersController = require("../controllers/eventSpeakerControllers")
 
-eventspeakersRoutes.get("/api/eventspeakers",  eventspeakersController.getAllEventspeakers)
-eventspeakersRoutes.get("/api/eventspeakers/:id",  eventspeakersController.getEventspeakersById)
-eventspeakersRoutes.post("/api/eventspeakers",  eventspeakersController.createEventspeakers)
-eventspeakersRoutes.delete("/api/eventspeakers/:id",  eventspeakersController.deleteEventspeakers)
+eventSpeakersRoutes.get("/api/eventSpeakers",  eventSpeakersController.getAllSpeakers)
+eventSpeakersRoutes.get("/api/eventSpeakers/:id",  eventSpeakersController.getEventspeakersById)
+eventSpeakersRoutes.post("/api/eventSpeakers",  eventSpeakersController.createEventspeakers)
+eventSpeakersRoutes.delete("/api/eventSpeakers/:id",  eventSpeakersController.deleteeventspeakers)
 
 
 
-module.exports = eventspeakersRoutes;
+module.exports = eventSpeakersRoutes;
 
 // GET /eventspeakers - List all event-speaker assignments (with pagination)
 // POST /eventspeakers - Assign a speaker to an event
