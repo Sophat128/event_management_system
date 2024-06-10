@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config()
 
 const express = require("express");
+// const eventSpeakerRoutes = require("./routes/eventSpeakerRoutes")
 const eventRoutes = require("./routers/eventRoutes");
 const profileRoutes = require("./routers/profileRoutes");
 const morgan = require("morgan");
@@ -15,7 +16,10 @@ app.use("/assets", express.static("public"))
 app.use("",eventRoutes)
 app.use("",ticketRoutes)
 app.use("",profileRoutes)
-app.use("",eventSpeakerRoutes)
+// app.use("",eventSpeakerRoutes)
+
+
+
 
 
 app.listen(process.env.PORT, ()=> {
