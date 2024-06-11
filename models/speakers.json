@@ -10,11 +10,6 @@
     "bio": "Renowned Health and Wellness Speaker"
   },
   {
-    "speakerId": 3,
-    "name": "Seyha",
-    "bio": "Expert in AI and Machine Learning"
-  },
-  {
     "speakerId": 4,
     "name": "Sreyneath",
     "bio": "Expert in AI and Machine Learning"
@@ -23,5 +18,10 @@
     "speakerId": 5,
     "name": "vanrath",
     "bio": "Expert in AI  Machine Learning"
+  },
+  {
+    "speakerId": 6,
+    "name": "sophat",
+    "bio": "Testing"
   }
 ]
