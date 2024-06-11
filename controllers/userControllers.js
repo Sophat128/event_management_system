@@ -50,9 +50,7 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 
 const searchUser = (req, res) => {
   const query = req.query;
-
   const filteredUser = search(userData, query);
-
   res.status(200).json({
     message: "User fetched successfully",
     data: filteredUser,
