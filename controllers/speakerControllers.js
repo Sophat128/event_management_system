@@ -78,8 +78,12 @@ const createSpeaker = (req, res) => {
   let existingData = [];
   existingData = speakerData;
   existingData.push(speaker);
-
+  if(name == null || bio == null){
+    res.status(400).send({message: "Bad request"})
+  }else{
   writeDataToFile(path, existingData, res, speaker, 201);
+
+  }
 };
 
 const updateSpeaker = (req, res) => {

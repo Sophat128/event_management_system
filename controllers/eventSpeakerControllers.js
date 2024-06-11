@@ -1,11 +1,11 @@
 const fs = require("fs");
 
-const path = "./models/eventspeakers.json";
+const path = "./models/eventSpeakers.json";
 
-let eventspeakersData;
+let eventSpeakerData;
 try {
-  eventspeakersData = fs.readFileSync(path, "utf8");
-  eventspeakersData = JSON.parse(eventspeakersData);
+  eventSpeakerData = fs.readFileSync(path, "utf8");
+  eventSpeakerData = JSON.parse(eventSpeakerData);
 } catch (err) {
   console.error("Error reading file:", err);
 }
@@ -32,12 +32,12 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
 }
 
 
-function findEventspeakersById(eventspeakersId, res) {
-  const eventspeakers = eventspeakersData.find((eventspeakers) => eventspeakers.eventspeakersId === eventspeakersId);
-  if (!eventspeakers) {
-    res.status(404).send("Eventspeakers not found");
+function findEventSpeakerById(eventSpeakerId, res) {
+  const eventSpeaker = eventSpeakerData.find((eventSpeaker) => eventSpeaker.eventSpeakerId === eventSpeakerId);
+  if (!eventSpeaker) {
+    res.status(404).send("Event speaker not found");
   } else {
-    return res.json(eventspeakers);
+    return res.json(eventSpeaker);
   }
 }
 
@@ -47,63 +47,83 @@ const getAllSpeakers = (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 10;
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedEventspeakers = eventspeakersData.slice(startIndex, endIndex);
+  const paginatedEventSpeakers = eventSpeakerData.slice(startIndex, endIndex);
 
   res.json({
     page,
     pageSize,
-    totalPages: Math.ceil(eventspeakersData.length / pageSize),
-    totalItems: eventspeakersData.length,
-    eventspeakers : paginatedEventspeakers,
+    totalPages: Math.ceil(eventSpeakerData.length / pageSize),
+    totalItems: eventSpeakerData.length,
+    eventSpeakers : paginatedEventSpeakers,
   });
 };
 
-const getEventspeakersById = (req, res) => {
+const getEventSpeakersById = (req, res) => {
   const id = parseInt(req.params.id);
-  findEventspeakersById(id, res);
+  findEventSpeakerById(id, res);
 };
 
-const createEventspeakers = (req, res) => {
-  const { eventId,speakersId } = req.body;
-  
+const createEventSpeaker = (req, res) => {
+  const { eventId,speakerId } = req.body;
   const newId =
-  eventspeakersData.length > 0 ? eventspeakersData[eventspeakersData.length - 1].eventId + 1 : 1;
-  const now = new Date().toISOString();
-
+  eventSpeakerData.length > 0 ? eventSpeakerData[eventSpeakerData.length - 1].eventSpeakerId + 1 : 1;
   const eventSpeakers = {
-    eventId: newId,
-    speakersId: speakersId,
+    eventSpeakerId: newId,
+    eventId: eventId,
+    speakerId: speakerId,
   };
   
-
   // Add the new Event data to the existing data array
   let existingData = [];
-  existingData = eventspeakersData;
+  existingData = eventSpeakerData;
   existingData.push(eventSpeakers);
-  if(firstName == null || lastName == null || phoneNumber == null || bio == null){
+  if(eventId == null || speakerId == null){
     res.status(400).send({message: "Bad request"})
   }else{
-    writeDataToFile(path, existingData, res, eventspeakers, 201);
+    writeDataToFile(path, existingData, res, eventSpeakers, 201);
   }
 };
 
+const updateEventSpeaker = (req, res) => {
+  const eventSpeakerId = parseInt(req.params.id);
+  const { eventId, speakerId } = req.body;
 
+  // Read existing data from the JSON file
+  let existingData = eventSpeakerData;
 
+  // Find the ticket to update
+  const eventSpeakerIndex = eventSpeakerData.findIndex((eventSpeaker) => eventSpeaker.eventSpeakerId === eventSpeakerId);
+  if (eventSpeakerIndex === -1) {
+    return res.status(404).send("Ticket not found");
+  }
+
+  // Update the ticket's data only with provided fields (partial update)
+  const updatedEventSpeaker = {
+    ...existingData[eventSpeakerIndex],
+    ...(eventId !== undefined && { eventId }),
+    ...(speakerId !== undefined && { speakerId })
+  };
+  existingData[eventSpeakerIndex] = updatedEventSpeaker;
+
+  // Write the updated data back to the JSON file
+  writeDataToFile(path, existingData, res, updatedEventSpeaker, 200);
+};
 
 // DELETE endpoint to update Event data
-const deleteeventspeakers = (req, res) => {
-  const eventspeakersId = parseInt(req.params.id);
-  const eventspeakersIndex = eventspeakersData.findIndex((event) => event.eventspeakersId === eventspeakersId);
-  if (eventspeakersIndex === -1) {
+const deleteEventSpeaker = (req, res) => {
+  const eventSpeakerId = parseInt(req.params.id);
+  const eventSpeakerIndex = eventSpeakerData.findIndex((event) => event.eventSpeakerId === eventSpeakerId);
+  if (eventSpeakerIndex === -1) {
     return res.status(404).send("Event not found");
   }
-  eventspeakersData = eventspeakersData.filter((event) => event.speakersIdId !== eventspeakersId);
-  writeDataToFile(path, eventspeakersData, res, "Eventspeakers deleted successfully", 200);
+  eventSpeakerData = eventSpeakerData.filter((event) => event.speakersIdId !== eventSpeakerId);
+  writeDataToFile(path, eventSpeakerData, res, "Event speaker deleted successfully", 200);
 };
 
 module.exports = {
   getAllSpeakers,
-  getEventspeakersById,
-  createEventspeakers,
-  deleteeventspeakers,
+   getEventSpeakersById,
+   createEventSpeaker,
+   updateEventSpeaker,
+   deleteEventSpeaker,
 };
