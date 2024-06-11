@@ -1,5 +1,17 @@
 [
-  {"eventId": 1, "speakerId": 1},
-  {"eventId": 2, "speakerId": 2}
+  {
+    "eventSpeakerId": 1,
+    "eventId": 5,
+    "speakerId": 1
+  },
+  {
+    "eventSpeakerId": 2,
+    "eventId": 2,
+    "speakerId": 2
+  },
+  {
+    "eventSpeakerId": 3,
+    "eventId": 50,
+    "speakerId": 10
+  }
 ]
-
