@@ -2,6 +2,7 @@ const  speakerRoutes = require("express").Router();
 const  speakerController = require("../controllers/speakerControllers")
 
 speakerRoutes.get("/api/speakers",  speakerController.getAllSpeakers)
+speakerRoutes.get("/api/speakers/search",  speakerController.searchSpeaker)
 speakerRoutes.get("/api/speakers/:id",  speakerController.getSpeakerById)
 speakerRoutes.post("/api/speakers",  speakerController.createSpeaker)
 speakerRoutes.patch("/api/speakers/:id",  speakerController.updateSpeaker)

@@ -31,6 +31,29 @@ function writeDataToFile(filePath, data, res, reqData, statusCode) {
   }
 }
 
+function search(speakers, query) {
+  return speakers.filter((speaker) => {
+    const matchesSpeakerID = query.speakerID
+      ? speaker.speakerId === parseInt(query.speakerID)
+      : true;
+    const matchesName = query.name
+      ? speaker.name.toLowerCase().includes(query.name.toLowerCase())
+      : true;
+    const matchesBio = query.bio
+      ? speaker.bio.toLowerCase().includes(query.bio.toLowerCase())
+      : true;
+    return matchesSpeakerID && matchesName && matchesBio;
+  });
+}
+
+const searchSpeaker = (req, res) => {
+  const query = req.query;
+  const filteredSpeaker = search(speakerData, query);
+  res.status(200).json({
+    message: "Speaker fetched successfully",
+    data: filteredSpeaker,
+  });
+};
 
 function findSpeakerById(speakerId, res) {
   const speaker = speakerData.find((speaker) => speaker.speakerId === speakerId);
@@ -125,6 +148,7 @@ const deleteSpeaker = (req, res) => {
 
 module.exports = {
   getAllSpeakers,
+  searchSpeaker,
   getSpeakerById,
   createSpeaker,
   updateSpeaker,
